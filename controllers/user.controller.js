@@ -2,7 +2,6 @@ const User = require("../models/User.model");
 
 const postData = async (req, res) => {
   try {
-    // Your existing code to create a user
     const lastUser = await User.findOne().sort({ userID: -1 }).exec();
     let newUserId;
 
@@ -32,4 +31,24 @@ const getUser = async (req, res) => {
   }
 };
 
-module.exports = { postData, getUser };
+const login = async (req, res) => {
+  const { email, phone } = req.body;
+  try {
+    const response = await User.find({});
+    const user = response.find(
+      (user) => user.email === email && user.phone === phone
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res
+      .status(200)
+      .json({ message: "User logged in successfully", response: user });
+  } catch (error) {
+    return response.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = { postData, getUser, login };
