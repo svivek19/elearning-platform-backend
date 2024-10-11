@@ -25,6 +25,10 @@ const courseSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
+  link: {
+    type: String,
+    required: true,
+  },
 });
 
 const Course = mongoose.model("Course", courseSchema);

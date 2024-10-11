@@ -3,7 +3,7 @@ const Course = require("../models/course.model");
 // Create a new course
 const createCourse = async (req, res) => {
   try {
-    const { courseName, type, duration, description } = req.body;
+    const { courseName, type, duration, description, link } = req.body;
 
     // Generate the course ID
     const latestCourse = await Course.findOne().sort({ _id: -1 });
@@ -22,6 +22,7 @@ const createCourse = async (req, res) => {
       type,
       duration,
       description,
+      link,
     });
 
     await course.save();
