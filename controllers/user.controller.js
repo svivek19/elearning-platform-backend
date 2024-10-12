@@ -1,3 +1,4 @@
+const Course = require("../models/course.model.js");
 const User = require("../models/user.model.js");
 
 const postData = async (req, res) => {
@@ -31,6 +32,41 @@ const getUser = async (req, res) => {
   }
 };
 
+const updateUserStatus = async (req, res) => {
+  const { userID } = req.params;
+  const { status } = req.body;
+
+  try {
+    const validStatuses = [
+      "Not Enrolled",
+      "Enrolled",
+      "Completed",
+      "In Progress",
+    ];
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({ message: "Invalid status value." });
+    }
+
+    // Find the course by courseID and update its status
+    const updateUserStatus = await User.findOneAndUpdate(
+      { userID },
+      { status },
+      { new: true, runValidators: true }
+    );
+
+    // If the course is not found, return a 404 response
+    if (!updateUserStatus) {
+      return res.status(404).json({ message: "Course not found." });
+    }
+
+    // Return the updated course details
+    res.status(200).json(updateUserStatus);
+  } catch (error) {
+    console.error("Error updating user status:", error);
+    res.status(500).json({ message: "Internal server error." });
+  }
+};
+
 const login = async (req, res) => {
   const { email, phone } = req.body;
   try {
@@ -51,4 +87,4 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { postData, getUser, login };
+module.exports = { postData, getUser, login, updateUserStatus };

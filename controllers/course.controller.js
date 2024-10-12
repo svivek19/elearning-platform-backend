@@ -47,4 +47,14 @@ const getAllCourses = async (req, res) => {
   }
 };
 
-module.exports = { createCourse, getAllCourses };
+// get course count
+const getCourseContent = async (req, res) => {
+  try {
+    const courses = await Course.find({});
+    res.status(200).json({ message: "All Courses", count: courses.length });
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+module.exports = { createCourse, getAllCourses, getCourseContent };

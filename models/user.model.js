@@ -23,6 +23,12 @@ const userSchema = new mongoose.Schema({
     required: true,
     enum: ["male", "female", "other"],
   },
+  status: {
+    type: String,
+    required: true,
+    enum: ["Not Enrolled", "Enrolled", "Completed", "In Progress"],
+    default: "Not Enrolled",
+  },
 });
 
 const User = mongoose.model("User", userSchema);
