@@ -26,7 +26,12 @@ const userSchema = new mongoose.Schema({
   status: {
     type: String,
     required: true,
-    enum: ["Not Enrolled", "Enrolled", "Completed", "In Progress"],
+    enum: ["Not Enrolled", "Enrolled", "Completed"],
+    default: "Not Enrolled",
+  },
+  enrolledCourse: {
+    type: String,
+    required: true,
     default: "Not Enrolled",
   },
 });

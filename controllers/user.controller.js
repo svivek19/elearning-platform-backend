@@ -37,12 +37,7 @@ const updateUserStatus = async (req, res) => {
   const { status } = req.body;
 
   try {
-    const validStatuses = [
-      "Not Enrolled",
-      "Enrolled",
-      "Completed",
-      "In Progress",
-    ];
+    const validStatuses = ["Not Enrolled", "Enrolled", "Completed"];
     if (!validStatuses.includes(status)) {
       return res.status(400).json({ message: "Invalid status value." });
     }
@@ -56,13 +51,34 @@ const updateUserStatus = async (req, res) => {
 
     // If the course is not found, return a 404 response
     if (!updateUserStatus) {
-      return res.status(404).json({ message: "Course not found." });
+      return res.status(404).json({ message: "user not found." });
     }
 
     // Return the updated course details
     res.status(200).json(updateUserStatus);
   } catch (error) {
     console.error("Error updating user status:", error);
+    res.status(500).json({ message: "Internal server error." });
+  }
+};
+
+const updateCourse = async (req, res) => {
+  const { userID } = req.params;
+  const { enrolledCourse } = req.body;
+
+  try {
+    const updateUser = await User.findOneAndUpdate(
+      { userID },
+      { enrolledCourse },
+      { new: true }
+    );
+
+    if (!updateUser) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    res.status(200).json(updateUser);
+  } catch (error) {
     res.status(500).json({ message: "Internal server error." });
   }
 };
@@ -87,4 +103,4 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { postData, getUser, login, updateUserStatus };
+module.exports = { postData, getUser, login, updateUserStatus, updateCourse };
